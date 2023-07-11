@@ -1,0 +1,67 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.35.3.
+--
+-- see: https://github.com/sol/hpack
+
+name:           haskell-json
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/DCPagan/haskell-json#readme>
+homepage:       https://github.com/DCPagan/haskell-json#readme
+bug-reports:    https://github.com/DCPagan/haskell-json/issues
+author:         D.C. Pagan
+maintainer:     example@example.com
+copyright:      2023 D.C. Pagan
+license:        BSD-2-Clause
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/DCPagan/haskell-json
+
+library
+  exposed-modules:
+      Json
+  other-modules:
+      Paths_haskell_json
+  autogen-modules:
+      Paths_haskell_json
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wno-unused-do-bind -Wno-type-defaults
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable haskell-json-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_json
+  autogen-modules:
+      Paths_haskell_json
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wno-unused-do-bind -Wno-type-defaults -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , haskell-json
+  default-language: Haskell2010
+
+test-suite haskell-json-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_haskell_json
+  autogen-modules:
+      Paths_haskell_json
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wno-unused-do-bind -Wno-type-defaults -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , haskell-json
+  default-language: Haskell2010
