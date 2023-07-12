@@ -101,7 +101,7 @@ char :: Char -> Parser Char
 char = sat . (==)
 
 string :: String -> Parser String
-string = foldr (liftA2 (:) . sat . (==)) (pure [])
+string = foldr (liftA2 (:) . char) (pure [])
 
 times :: Int -> Parser a -> Parser [a]
 times 0 _ = pure []
@@ -118,7 +118,7 @@ escape =
   (:)
     <$> char '\\'
     <*> ( (:) <$> sat (flip elem "\"\\/bfnrt") <*> pure []
-            <|> (:) <$> (sat ('u' ==)) <*> (times 4 (sat isHexDigit))
+            <|> (:) <$> char 'u' <*> times 4 (sat isHexDigit)
         )
 
 natural :: Parser Integer
