@@ -1,6 +1,7 @@
 module Json
   ( JsonValue,
     Parser,
+    ParseError (..),
     parse,
     runParser,
     item,
@@ -27,7 +28,7 @@ module Json
   )
 where
 
-import Control.Applicative (Alternative, empty, liftA2, many, some, (<|>))
+import Control.Applicative (Alternative, empty, many, some, (<|>))
 import Control.Monad (void)
 import Data.Char (isDigit, isHexDigit, isSpace)
 import Data.List (intercalate)
@@ -77,12 +78,14 @@ instance Show JsonValue where
         : intercalate "," (map (\(k, v) -> k ++ ':' : show v) xs)
         ++ "}"
 
-runParser :: Parser a -> String -> Either IOError a
+newtype ParseError = PE { toMessage :: String }
+
+runParser :: Parser a -> String -> Either ParseError a
 runParser p s = case parse p s of
-  [] -> Left $ userError "Syntax error"
+  [] -> Left $ PE "Syntax error"
   [(v, [])] -> Right v
-  [(_, t)] -> Left $ userError $ "Trailing characters: " ++ t
-  _ -> Left $ userError "Ambiguous parse"
+  [(_, t)] -> Left $ PE ("Trailing characters: " ++ t)
+  _ -> Left $ PE "Ambiguous parse"
 
 item :: Parser Char
 item =
@@ -101,11 +104,10 @@ char :: Char -> Parser Char
 char = sat . (==)
 
 string :: String -> Parser String
-string = foldr (liftA2 (:) . char) (pure [])
+string = traverse char
 
 times :: Int -> Parser a -> Parser [a]
-times 0 _ = pure []
-times c p = (:) <$> p <*> times (pred c) p
+times = (sequenceA .) . replicate
 
 space :: Parser ()
 space = void $ many $ sat isSpace
